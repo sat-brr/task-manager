@@ -69,9 +69,14 @@ class UserLogout(View):
 class UsersPage(View):
     def get(self, request):
         users = User.objects.all()
-        return render(request, 'users/users.html', context={
-            'users': users
-        })
+        if not request.user.is_authenticated:
+            return render(request, 'users/users.html', context={
+                'users': users
+            })
+        else:
+            return render(request, 'users/users_auth.html', context={
+                'users': users
+            })
 
 
 class UpdateUser(SuccessMessageMixin, UpdateView):
@@ -111,3 +116,10 @@ class RemoverUser(SuccessMessageMixin, DeleteView):
         return render(request, self.template_name, context={
             'user': request.user
         })
+
+    def post(self, request, *args, **kwargs):
+        if self.get_object().author.all() or self.get_object().tasks.all():
+            messages.error(request, _("""Невозможно удалить пользователя,
+                                      потому что он используется"""))
+            return redirect('/users/')
+        return super().post(request, *args, **kwargs)

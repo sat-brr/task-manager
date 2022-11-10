@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.utils.translation import gettext as _
 from task_manager.statuses.forms import CreateStatusForm
 from task_manager.statuses.models import Status
@@ -6,6 +6,7 @@ from django.views.generic.edit import UpdateView, DeleteView, CreateView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views import View
 from task_manager.mixins import MyLoginRequired
+from django.contrib import messages
 # Create your views here.
 
 
@@ -35,9 +36,9 @@ class UpdateStatus(MyLoginRequired, SuccessMessageMixin, UpdateView):
     success_url = '/statuses/'
     success_message = _("Статус успешно изменён")
 
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        return super().get(request, *args, **kwargs)
+    # def get(self, request, *args, **kwargs):
+    #     self.object = self.get_object()
+    #     return super().get(request, *args, **kwargs)
 
 
 class DeleteStatus(MyLoginRequired, SuccessMessageMixin, DeleteView):
@@ -46,3 +47,10 @@ class DeleteStatus(MyLoginRequired, SuccessMessageMixin, DeleteView):
     model = Status
     success_url = '/statuses/'
     success_message = _("Статус успешно удалён")
+
+    def post(self, request, *args, **kwargs):
+        if self.get_object().task_set.all():
+            messages.error(request, _("""Невозможно удалить статус,
+                                      потому что он используется"""))
+            return redirect('/statuses/')
+        return super().post(request, *args, **kwargs)

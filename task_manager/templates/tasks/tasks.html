@@ -1,0 +1,40 @@
+{% extends 'base_auth.html' %}
+{% load i18n %}
+
+{% block content %}
+<div class="container wrapper flex-grow-1">
+    <h1 class="my-4">{% translate "Задачи" %} </h1> 
+    <br>  
+<a class="nav-link" href="/tasks/create/">{% translate "Создать задачу" %}</a>
+<table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>{% translate "Имя" %}</th>
+        <th>{% translate "Статус" %}</th>
+        <th>{% translate "Автор" %}</th>
+        <th>{% translate "Исполнитель" %}</th>
+        <th>{% translate "Дата создания" %}</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for task in tasks %}
+        <tr>
+            <td>{{ task.id }}</td>
+            <td><a href="{% url 'detail_task' task.id%}">{{ task.name }}</a></td>
+            <td>{{ task.status }}</td>
+            <td>{{ task.author }}</td>
+            <td>{{ task.executor }}</td>
+            <td>{{ task.date_created }}</td>
+            <td>
+                <a href="{% url 'update_task' task.id %}">{% translate "Изменить" %}</a>
+                <br>
+                <a href="{% url 'delete_task' task.id %}">{% translate "Удалить" %}</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}
