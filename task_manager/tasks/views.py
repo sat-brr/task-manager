@@ -2,22 +2,18 @@ from django.shortcuts import render, redirect
 from django.utils.translation import gettext as _
 from task_manager.tasks.models import Task
 from django.views.generic import UpdateView, DeleteView, CreateView, DetailView
-from django.views import View
 from task_manager.mixins import MyLoginRequired
 from django.contrib.messages.views import SuccessMessageMixin
-from task_manager.tasks.forms import CreateTaskForm
+from task_manager.tasks.forms import CreateTaskForm, TasksFilterForm
 from django.contrib import messages
+from django_filters.views import FilterView
 # Create your views here.
 
 
-class TasksPage(MyLoginRequired, View):
-
-    def get(self, request):
-        tasks = Task.objects.all()
-        template_name = 'tasks/tasks.html'
-        return render(request, template_name, context={
-            'tasks': tasks
-        })
+class TasksPage(MyLoginRequired, FilterView):
+    filterset_class = TasksFilterForm
+    template_name = 'tasks/tasks.html'
+    model = Task
 
 
 class CreateTask(MyLoginRequired, SuccessMessageMixin, CreateView):

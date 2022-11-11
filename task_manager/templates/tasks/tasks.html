@@ -1,5 +1,6 @@
 {% extends 'base_auth.html' %}
 {% load i18n %}
+{% load bootstrap4 %}
 
 {% block content %}
 <div class="container wrapper flex-grow-1">
@@ -19,13 +20,22 @@
       </tr>
     </thead>
     <tbody>
-        {% for task in tasks %}
+        <div class="card">
+            <div class="card-body bg-light">
+                <form method="get">
+                    {% bootstrap_form filter.form %}
+                    <button type="submit" class="btn btn-primary">{% translate "Показать" %}</button>
+                </form>
+            </div>
+        </div>
+        <hr>
+        {% for task in filter.qs %}
         <tr>
             <td>{{ task.id }}</td>
             <td><a href="{% url 'detail_task' task.id%}">{{ task.name }}</a></td>
             <td>{{ task.status }}</td>
-            <td>{{ task.author }}</td>
-            <td>{{ task.executor }}</td>
+            <td>{{task.author.first_name}} {{task.author.last_name}}</td>
+            <td>{{task.executor.first_name}} {{task.executor.last_name}}</td>
             <td>{{ task.date_created }}</td>
             <td>
                 <a href="{% url 'update_task' task.id %}">{% translate "Изменить" %}</a>
