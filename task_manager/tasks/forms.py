@@ -1,5 +1,6 @@
 from task_manager.tasks.models import Task
 from task_manager.statuses.models import Status
+from task_manager.labels.models import Label
 from django.contrib.auth.models import User
 from django.utils.translation import gettext as _
 from django import forms
@@ -21,7 +22,10 @@ class CreateTaskForm(forms.ModelForm):
     executor = forms.ModelChoiceField(label=_('Исполнитель'),
                                       queryset=User.objects.all(),
                                       required=False)
+    labels = forms.ModelMultipleChoiceField(label=_('Метки'),
+                                            queryset=Label.objects.all(),
+                                            required=False)
 
     class Meta:
         model = Task
-        fields = ["name", "description", "status", "executor"]
+        fields = ["name", "description", "status", "executor", "labels"]
