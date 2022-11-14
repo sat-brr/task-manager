@@ -107,7 +107,7 @@ class RemoverUser(SuccessMessageMixin, DeleteView):
 
     def get(self, request, pk):
         if not request.user.is_authenticated:
-            messages.error(request, _('Вы не авторизованы!. Выполните вход.'))
+            messages.error(request, _('Вы не авторизованы! Выполните вход.'))
             return redirect('/login/')
         if request.user.id != pk:
             messages.error(request, _("""У Вас нет прав для

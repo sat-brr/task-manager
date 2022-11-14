@@ -2,11 +2,12 @@
 {% load bootstrap4 %}
 {% load i18n %}
 {% bootstrap_css %}
-{% load static %}
+{% bootstrap_javascript jquery='full' %}
 
 <html lang="ru-ru">
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/navbar-static/">
     <title>{% translate "Менеджер задач Hexlet" %}</title>
   </head>
   <body class="d-flex flex-column min-vh-100">
@@ -42,6 +43,9 @@
         </ul>
       </div>
     </nav>
+    <br>
+    <br>
+    <br>
     <div class="container wrapper flex-grow-1">
       <p>{% bootstrap_messages %}</p>
          {% block content %}

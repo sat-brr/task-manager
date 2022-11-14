@@ -2,12 +2,13 @@
 {% load bootstrap4 %}
 {% load i18n %}
 {% bootstrap_css %}
-{% load static %}
+{% bootstrap_javascript jquery='full' %}
 
-<html lang="ru-ru">
+<html lang="">
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>{% translate "Менеджер задач Hexlet" %}</title>
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/navbar-static/">
   </head>
   <body class="d-flex flex-column min-vh-100">
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
@@ -30,14 +31,16 @@
             <li class="nav-item">
               <a class="nav-link" href="/users/create/">{% translate "Регистрация" %}</a>
             </li>
-          
         </ul>
       </div>
     </nav>
-      <div class="container wrapper flex-grow-1">
+    <br>
+    <br>
+    <br>
+    <div class="container wrapper flex-grow-1">
       <p>{% bootstrap_messages %}</p>
         {% block content %}
         {% endblock %}
-      </div>
+    </div>
   </body>
 </html>

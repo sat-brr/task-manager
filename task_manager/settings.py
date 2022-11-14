@@ -29,7 +29,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['webserver', '127.0.0.1', 'task-manager-sat.up.railway.app']
+ALLOWED_HOSTS = ['webserver', 'localhost', 'task-manager-sat.up.railway.app']
 CSRF_TRUSTED_ORIGINS = ['https://*.railway.app']
 
 
@@ -60,6 +60,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'rollbar.contrib.django.middleware.RollbarNotifierMiddleware',
+   # 'django.middleware.locale.LocaleMiddleware',
 ]
 
 ROOT_URLCONF = 'task_manager.urls'
@@ -118,6 +119,10 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ru-ru'
 
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'locale'),
+)
+
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
@@ -130,9 +135,9 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-BOOTSTRAP4 = {
-    "theme_url": '/static/navbar.css'
-}
+# BOOTSTRAP4 = {
+#     "theme_url": '/static/navbar.css'
+# }
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

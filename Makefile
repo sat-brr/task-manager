@@ -1,7 +1,7 @@
 install:
 	poetry install
 start:
-	python3 manage.py runserver
+	python3 manage.py runserver 127.0.0.1:8001
 test:
 	python3 manage.py test
 lint:
