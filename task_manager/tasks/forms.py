@@ -3,6 +3,8 @@ from task_manager.statuses.models import Status
 from task_manager.labels.models import Label
 from django.contrib.auth.models import User
 from django.utils.translation import gettext as _
+from django.db.models.functions import Concat
+from django.db.models import Value
 import django_filters
 from django import forms
 
@@ -35,8 +37,14 @@ class CreateTaskForm(forms.ModelForm):
 class TasksFilterForm(django_filters.FilterSet):
     status = django_filters.ModelChoiceFilter(label=_('Статус'),
                                               queryset=Status.objects.all())
-    executor = django_filters.ModelChoiceFilter(label=_('Исполнитель'),
-                                                queryset=User.objects.all())
+    all_executives = User.objects.values_list(
+        'id',
+        Concat('first_name', Value(' '), 'last_name'),
+        named=True,
+    ).all()
+
+    executor = django_filters.ChoiceFilter(label=_('Исполнитель'),
+                                                choices=all_executives)
     labels = django_filters.ModelChoiceFilter(label=_('Метка'),
                                               queryset=Label.objects.all())
     author = django_filters.BooleanFilter(widget=forms.CheckboxInput,

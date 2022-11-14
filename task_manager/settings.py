@@ -14,6 +14,7 @@ from pathlib import Path
 import dotenv
 import os
 import dj_database_url
+import rollbar
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -60,7 +61,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'rollbar.contrib.django.middleware.RollbarNotifierMiddleware',
-   # 'django.middleware.locale.LocaleMiddleware',
 ]
 
 ROOT_URLCONF = 'task_manager.urls'
@@ -91,9 +91,12 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
-    } # if DEBUG else dj_database_url.config(default=os.getenv('DATABASE_RAILWAY'))
+    }
 }
 
+# DATABASES = {
+#         'default': dj_database_url.config(default=os.getenv('DATABASE_RAILWAY'))
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -135,10 +138,6 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-# BOOTSTRAP4 = {
-#     "theme_url": '/static/navbar.css'
-# }
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
@@ -150,3 +149,5 @@ ROLLBAR = {
     'code_version': '1.0',
     'root': BASE_DIR,
 }
+
+rollbar.init(**ROLLBAR)
