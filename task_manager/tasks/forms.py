@@ -9,6 +9,11 @@ import django_filters
 from django import forms
 
 
+class MyModelChoiceField(forms.ModelChoiceField):
+    def label_from_instance(self, obj):
+        return obj.get_full_name()
+
+
 class CreateTaskForm(forms.ModelForm):
     name = forms.CharField(label=_('Имя'),
                            widget=forms.TextInput(attrs={'class': 'form-input'})
@@ -22,9 +27,8 @@ class CreateTaskForm(forms.ModelForm):
                                   )
     status = forms.ModelChoiceField(label=_('Статус'),
                                     queryset=Status.objects.all())
-    executor = forms.ModelChoiceField(label=_('Исполнитель'),
-                                      queryset=User.objects.all(),
-                                      required=False)
+    executor = MyModelChoiceField(label=_('Исполнитель'),
+                                                queryset=User.objects.all(), required=False)
     labels = forms.ModelMultipleChoiceField(label=_('Метки'),
                                             queryset=Label.objects.all(),
                                             required=False)
