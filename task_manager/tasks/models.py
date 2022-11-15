@@ -21,5 +21,5 @@ class Task(models.Model):
 
 
 class LabelAndTask(models.Model):
-    label = models.ForeignKey(Label, on_delete=models.CASCADE)
-    task = models.ForeignKey(Task, on_delete=models.PROTECT)
+    label = models.ForeignKey(Label, on_delete=models.PROTECT)
+    task = models.ForeignKey(Task, on_delete=models.CASCADE)

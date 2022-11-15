@@ -35,7 +35,7 @@ class UpdateTask(MyLoginRequired, SuccessMessageMixin, UpdateView):
     success_message = _("Задача успешно изменена")
 
 
-class DeleteTask(MyLoginRequired, DeleteView, SuccessMessageMixin):
+class DeleteTask(MyLoginRequired, SuccessMessageMixin, DeleteView):
 
     template_name = 'tasks/delete_task.html'
     model = Task

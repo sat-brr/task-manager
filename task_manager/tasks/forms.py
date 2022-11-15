@@ -28,7 +28,8 @@ class CreateTaskForm(forms.ModelForm):
     status = forms.ModelChoiceField(label=_('Статус'),
                                     queryset=Status.objects.all())
     executor = MyModelChoiceField(label=_('Исполнитель'),
-                                                queryset=User.objects.all(), required=False)
+                                  queryset=User.objects.all(),
+                                  required=False)
     labels = forms.ModelMultipleChoiceField(label=_('Метки'),
                                             queryset=Label.objects.all(),
                                             required=False)
@@ -48,7 +49,7 @@ class TasksFilterForm(django_filters.FilterSet):
     ).all()
 
     executor = django_filters.ChoiceFilter(label=_('Исполнитель'),
-                                                choices=all_executives)
+                                           choices=all_executives)
     labels = django_filters.ModelChoiceFilter(label=_('Метка'),
                                               queryset=Label.objects.all())
     author = django_filters.BooleanFilter(widget=forms.CheckboxInput,
