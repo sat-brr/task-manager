@@ -1,8 +1,7 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.utils.translation import gettext as _
-from django.views.generic import UpdateView, DeleteView, CreateView
-from django.views import View
-from task_manager.mixins import MyLoginRequired
+from django.views.generic import UpdateView, DeleteView, CreateView, ListView
+from task_manager.mixins import CustomLoginRequired
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from task_manager.labels.models import Label
@@ -10,17 +9,14 @@ from task_manager.labels.forms import CreateLabelForm
 # Create your views here.
 
 
-class LabelsPage(MyLoginRequired, View):
+class LabelsPage(CustomLoginRequired, ListView):
 
-    def get(self, request):
-        labels = Label.objects.all()
-        template_name = 'labels/labels.html'
-        return render(request, template_name, context={
-            'labels': labels
-        })
+    model = Label
+    template_name = 'labels/labels.html'
+    context_object_name='labels'
 
 
-class CreateLabel(MyLoginRequired, SuccessMessageMixin, CreateView):
+class CreateLabel(CustomLoginRequired, SuccessMessageMixin, CreateView):
 
     form_class = CreateLabelForm
     template_name = 'labels/create_label.html'
@@ -28,7 +24,7 @@ class CreateLabel(MyLoginRequired, SuccessMessageMixin, CreateView):
     success_message = _("Метка успешно создана")
 
 
-class UpdateLabel(MyLoginRequired, SuccessMessageMixin, UpdateView):
+class UpdateLabel(CustomLoginRequired, SuccessMessageMixin, UpdateView):
 
     form_class = CreateLabelForm
     model = Label
@@ -37,7 +33,7 @@ class UpdateLabel(MyLoginRequired, SuccessMessageMixin, UpdateView):
     success_message = _("Метка успешно изменена")
 
 
-class DeleteLabel(MyLoginRequired, SuccessMessageMixin, DeleteView):
+class DeleteLabel(CustomLoginRequired, SuccessMessageMixin, DeleteView):
 
     model = Label
     template_name = 'labels/delete_label.html'

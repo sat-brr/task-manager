@@ -4,40 +4,26 @@ from django.views import View
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from task_manager.users.forms import RegisterForm, LoginForm
-from django.views.generic.edit import FormView, UpdateView, DeleteView
+from django.views.generic import UpdateView, DeleteView, CreateView, ListView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
+from task_manager.mixins import CustomLoginRequired
 # Create your views here.
 
 
-class UserCreate(FormView):
-
-    def get(self, request):
-        form_class = RegisterForm()
-        template_name = 'users/user_create.html'
-        return render(request, template_name, context={
-            'form': form_class
-        })
-
-    def post(self, request):
-        form = RegisterForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            user.refresh_from_db()
-            user.save()
-            messages.success(request, _('Пользователь успешно зарегистрирован'))
-            return redirect('/login/')
-        return render(request, 'users/user_create.html', context={
-            'form': form
-        })
+class UserCreate(SuccessMessageMixin, CreateView):
+    form_class = RegisterForm
+    template_name = 'users/user_create.html'
+    success_url = '/login/'
+    success_message = _('Пользователь успешно зарегистрирован')
 
 
 class UserLogin(View):
     form_class = LoginForm()
+    template_name = 'users/user_login.html'
 
     def get(self, request):
-        template_name = 'users/user_login.html'
-        return render(request, template_name, context={
+        return render(request, self.template_name, context={
             'form': self.form_class
         })
 
@@ -54,7 +40,7 @@ class UserLogin(View):
                                     имя пользователя и пароль.
                                     Оба поля могут быть чувствительны
                                     к регистру."""))
-            return render(request, 'users/user_login.html', context={
+            return render(request, self.template_name, context={
                 'form': self.form_class
             })
 
@@ -66,20 +52,20 @@ class UserLogout(View):
         return redirect('/')
 
 
-class UsersPage(View):
+class UsersPage(ListView):
+    model = User
+    template_name = ''
+    context_object_name = 'users'
+
     def get(self, request):
-        users = User.objects.all()
         if not request.user.is_authenticated:
-            return render(request, 'users/users.html', context={
-                'users': users
-            })
+            self.template_name = "users/users.html"
         else:
-            return render(request, 'users/users_auth.html', context={
-                'users': users
-            })
+            self.template_name = "users/users_auth.html"
+        return super().get(request)
 
 
-class UpdateUser(SuccessMessageMixin, UpdateView):
+class UpdateUser(CustomLoginRequired, SuccessMessageMixin, UpdateView):
     template_name = 'users/update_user.html'
     model = User
     form_class = RegisterForm
@@ -87,10 +73,6 @@ class UpdateUser(SuccessMessageMixin, UpdateView):
     success_message = _("Пользователь успешно изменён.")
 
     def get(self, request, pk, *args, **kwargs):
-        if not request.user.is_authenticated:
-            messages.error(request, _("""Вы не авторизованы!
-                                      Пожалуйста, выполните вход."""))
-            return redirect('/login/')
         if request.user.id != pk:
             messages.error(request, _("""У вас нет прав для
                                     изменения другого пользователя."""))
@@ -99,23 +81,18 @@ class UpdateUser(SuccessMessageMixin, UpdateView):
         return super().get(request, *args, **kwargs)
 
 
-class RemoverUser(SuccessMessageMixin, DeleteView):
+class RemoverUser(CustomLoginRequired, SuccessMessageMixin, DeleteView):
     template_name = 'users/remove_user.html'
     model = User
     success_url = '/users/'
     success_message = _("Пользователь успешно удалён.")
 
     def get(self, request, pk):
-        if not request.user.is_authenticated:
-            messages.error(request, _('Вы не авторизованы! Выполните вход.'))
-            return redirect('/login/')
         if request.user.id != pk:
             messages.error(request, _("""У Вас нет прав для
                                     удаления другого пользователя."""))
             return redirect('/users/')
-        return render(request, self.template_name, context={
-            'user': request.user
-        })
+        return super().get(request)
 
     def post(self, request, *args, **kwargs):
         if self.get_object().author.all() or self.get_object().tasks.all():

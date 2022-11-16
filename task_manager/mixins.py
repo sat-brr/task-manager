@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.shortcuts import redirect
 
 
-class MyLoginRequired(LoginRequiredMixin):
+class CustomLoginRequired(LoginRequiredMixin):
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:

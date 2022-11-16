@@ -1,8 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.utils.translation import gettext as _
 from task_manager.tasks.models import Task
 from django.views.generic import UpdateView, DeleteView, CreateView, DetailView
-from task_manager.mixins import MyLoginRequired
+from task_manager.mixins import CustomLoginRequired
 from django.contrib.messages.views import SuccessMessageMixin
 from task_manager.tasks.forms import CreateTaskForm, TasksFilterForm
 from django.contrib import messages
@@ -10,13 +10,15 @@ from django_filters.views import FilterView
 # Create your views here.
 
 
-class TasksPage(MyLoginRequired, FilterView):
+class TasksPage(CustomLoginRequired, FilterView):
+
     filterset_class = TasksFilterForm
     template_name = 'tasks/tasks.html'
     model = Task
 
 
-class CreateTask(MyLoginRequired, SuccessMessageMixin, CreateView):
+class CreateTask(CustomLoginRequired, SuccessMessageMixin, CreateView):
+
     form_class = CreateTaskForm
     template_name = 'tasks/create_task.html'
     success_url = '/tasks/'
@@ -27,7 +29,8 @@ class CreateTask(MyLoginRequired, SuccessMessageMixin, CreateView):
         return super().form_valid(form)
 
 
-class UpdateTask(MyLoginRequired, SuccessMessageMixin, UpdateView):
+class UpdateTask(CustomLoginRequired, SuccessMessageMixin, UpdateView):
+
     template_name = 'tasks/update_task.html'
     model = Task
     form_class = CreateTaskForm
@@ -35,7 +38,7 @@ class UpdateTask(MyLoginRequired, SuccessMessageMixin, UpdateView):
     success_message = _("Задача успешно изменена")
 
 
-class DeleteTask(MyLoginRequired, SuccessMessageMixin, DeleteView):
+class DeleteTask(CustomLoginRequired, SuccessMessageMixin, DeleteView):
 
     template_name = 'tasks/delete_task.html'
     model = Task
@@ -47,11 +50,9 @@ class DeleteTask(MyLoginRequired, SuccessMessageMixin, DeleteView):
         if task.author.id != request.user.id:
             messages.error(request, _("Задачу может удалить только её автор"))
             return redirect('/tasks/')
-        return render(request, self.template_name, context={
-            'task': task
-        })
+        return super().get(request)
 
 
-class DetailTask(MyLoginRequired, DetailView):
+class DetailTask(CustomLoginRequired, DetailView):
     model = Task
     template_name = 'tasks/detail_task.html'
