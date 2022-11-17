@@ -1,92 +1,51 @@
 from django.test import TestCase
 from django.test import Client
 from task_manager.statuses.models import Status
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+from django.urls import reverse
 # Create your tests here.
 
 
-class TestCreateStatus(TestCase):
+class TestStatusCrud(TestCase):
+    fixtures = ['status.json', 'user.json']
 
     def setUp(self):
         self.client = Client()
-        self.name = 'NewStatus'
-        self.username = 'tester'
-        self.password = 'Testing2020'
-
-        User.objects.create_user(username=self.username,
-                                 password=self.password)
+        user = get_user_model().objects.first()
+        self.client.force_login(user)
 
     def test_create_status(self):
-        self.client.login(username=self.username,
-                          password=self.password)
-        response = self.client.post('/statuses/create/', data={
-            'name': self.name
-        })
+        context = {
+            'name': 'NewStatus'
+        }
 
-        statuses = Status.objects.all()
-        new_status = Status.objects.get(name=self.name)
-
+        response = self.client.post(reverse('create_status'),
+                                    data=context)
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(statuses.count(), 1)
-        self.assertEqual(new_status.name, self.name)
 
+        new_status = Status.objects.last()
 
-class TestUpdateStatus(TestCase):
-
-    def setUp(self):
-        self.client = Client()
-        self.name = 'NewStatus'
-        self.username = 'tester'
-        self.password = 'Testing2020'
-
-        User.objects.create_user(username=self.username,
-                                 password=self.password)
-
-        self.client.login(username=self.username,
-                          password=self.password)
-
-        self.client.post('/statuses/create/', data={
-            'name': self.name
-        })
-
-        new_status = Status.objects.get(name=self.name)
-        self.pk_status = new_status.id
+        self.assertEqual(Status.objects.count(), 2)
+        self.assertEqual(new_status.name, context['name'])
 
     def test_update_status(self):
-        response = self.client.post(f"/statuses/{str(self.pk_status)}/update/",
-                                    data={'name': 'UpdateStatus'})
+        status = Status.objects.first()
+        context = {
+            'name': 'UpdatedStatus'
+        }
 
-        status = Status.objects.get(pk=self.pk_status)
+        response = self.client.post(reverse('update_status', args=[status.pk]),
+                                    data=context)
+
+        updated_status = Status.objects.first()
 
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(status.name, 'UpdateStatus')
-
-
-class TestDeleteStatus(TestCase):
-
-    def setUp(self):
-        self.client = Client()
-        self.name = 'NewStatus'
-        self.username = 'tester'
-        self.password = 'Testing2020'
-
-        User.objects.create_user(username=self.username,
-                                 password=self.password)
-
-        self.client.login(username=self.username,
-                          password=self.password)
-
-        self.client.post('/statuses/create/', data={
-            'name': self.name
-        })
-
-        new_status = Status.objects.get(name=self.name)
-        self.pk_status = new_status.id
+        self.assertEqual(updated_status.name, context['name'])
 
     def test_delete_status(self):
-        response = self.client.post(f'/statuses/{str(self.pk_status)}/delete/')
+        status = Status.objects.first()
 
-        statuses = Status.objects.all()
+        response = self.client.post(reverse('delete_status', args=[status.pk]))
 
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(statuses.count(), 0)
+        self.assertEqual(Status.objects.count(), 0)

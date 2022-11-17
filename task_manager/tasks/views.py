@@ -7,6 +7,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from task_manager.tasks.forms import CreateTaskForm, TasksFilterForm
 from django.contrib import messages
 from django_filters.views import FilterView
+from django.urls import reverse_lazy
 # Create your views here.
 
 
@@ -21,7 +22,7 @@ class CreateTask(CustomLoginRequired, SuccessMessageMixin, CreateView):
 
     form_class = CreateTaskForm
     template_name = 'tasks/create_task.html'
-    success_url = '/tasks/'
+    success_url = reverse_lazy('tasks_list')
     success_message = _("Задача успешно создана")
 
     def form_valid(self, form):
@@ -34,7 +35,7 @@ class UpdateTask(CustomLoginRequired, SuccessMessageMixin, UpdateView):
     template_name = 'tasks/update_task.html'
     model = Task
     form_class = CreateTaskForm
-    success_url = '/tasks/'
+    success_url = reverse_lazy('tasks_list')
     success_message = _("Задача успешно изменена")
 
 
@@ -42,17 +43,18 @@ class DeleteTask(CustomLoginRequired, SuccessMessageMixin, DeleteView):
 
     template_name = 'tasks/delete_task.html'
     model = Task
-    success_url = '/tasks/'
+    success_url = reverse_lazy('tasks_list')
     success_message = _("Задача успешно удалена")
 
     def get(self, request, pk):
         task = Task.objects.get(id=pk)
         if task.author.id != request.user.id:
             messages.error(request, _("Задачу может удалить только её автор"))
-            return redirect('/tasks/')
+            return redirect(reverse_lazy('tasks_list'))
         return super().get(request)
 
 
 class DetailTask(CustomLoginRequired, DetailView):
+
     model = Task
     template_name = 'tasks/detail_task.html'

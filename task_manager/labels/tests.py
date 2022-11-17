@@ -1,68 +1,51 @@
 from django.test import TestCase, Client
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from task_manager.labels.models import Label
+from django.urls import reverse
 # Create your tests here.
 
 
-class TestLabels(TestCase):
+class TestLabelsCrud(TestCase):
+    fixtures = ['user.json', 'label.json']
 
     def setUp(self):
         self.client = Client()
-        self.name = 'NewStatus'
-        self.username = 'tester'
-        self.password = 'Testing2020'
-        User.objects.create_user(username=self.username,
-                                 password=self.password)
-        self.label_name = 'TestMark'
-        self.login = self.client.login(username=self.username,
-                                       password=self.password)
+        user = get_user_model().objects.first()
+        self.client.force_login(user)
 
     def test_create_label(self):
-        self.login
-        response = self.client.post('/labels/create/', data={
-            'name': self.label_name
-        })
+        context = {
+            'name': 'NewLabel'
+        }
+        response = self.client.post(reverse('create_label'),
+                                    data=context)
 
         self.assertEqual(response.status_code, 302)
 
-        label = Label.objects.get(name=self.label_name)
-        labels = Label.objects.all()
+        label = Label.objects.last()
 
-        self.assertEqual(labels.count(), 1)
-        self.assertEqual(label.name, self.label_name)
+        self.assertEqual(Label.objects.count(), 2)
+        self.assertEqual(label.name, context['name'])
 
     def test_update_label(self):
-        self.login
-        self.client.post('/labels/create/', data={
-            'name': self.label_name
-        })
+        label = Label.objects.first()
+        context = {
+            'name': 'UpdatedLabel'
+        }
 
-        label = Label.objects.get(name=self.label_name)
-
-        response = self.client.post(f'/labels/{str(label.id)}/update/', data={
-            'name': 'NewNameMark'
-        })
+        response = self.client.post(reverse('update_label', args=[label.pk]),
+                                    data=context)
 
         self.assertEqual(response.status_code, 302)
 
-        label_updated = Label.objects.get(name='NewNameMark')
+        label_updated = Label.objects.first()
 
-        self.assertNotEqual(label.name, label_updated.name)
-        self.assertEqual(label.id, label_updated.id)
-        self.assertEqual(label_updated.name, 'NewNameMark')
+        self.assertEqual(label_updated.name, context['name'])
 
     def test_delete_label(self):
-        self.login
-        self.client.post('/labels/create/', data={
-            'name': self.label_name
-        })
+        label = Label.objects.first()
 
-        label = Label.objects.get(name=self.label_name)
-
-        response = self.client.post(f'/labels/{str(label.id)}/delete/')
+        response = self.client.post(reverse('delete_label', args=[label.pk]))
 
         self.assertEqual(response.status_code, 302)
-
-        labels = Label.objects.all()
-
-        self.assertEqual(labels.count(), 0)
+        self.assertEqual(Label.objects.count(), 0)

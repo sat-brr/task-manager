@@ -1,0 +1,10 @@
+[
+{
+    "model": "labels.label",
+    "pk": 1,
+    "fields": {
+        "name": "TestLabel",
+        "date_created": "2022-11-11T08:19:51.984Z"
+    }
+}
+]

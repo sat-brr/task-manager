@@ -3,7 +3,7 @@ from task_manager.labels import views
 
 
 urlpatterns = [
-    path('', views.LabelsPage.as_view()),
+    path('', views.LabelsPage.as_view(), name='labels_list'),
     path('create/', views.CreateLabel.as_view(),
          name='create_label'),
     path('<int:pk>/update/', views.UpdateLabel.as_view(),
