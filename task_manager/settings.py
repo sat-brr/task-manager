@@ -97,10 +97,9 @@ DATABASES = {
     }
 }
 
-if DEBUG:
+if not DEBUG:
     DATABASES['default'].update(db_from_env)
-# db_from_env = dj_database_url.config(default=os.getenv("DATABASE_URL"),
-#                                      conn_max_age=600)
+
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
@@ -152,7 +151,5 @@ ROLLBAR = {
     'code_version': '1.0',
     'root': BASE_DIR,
 }
-
-# DATABASES['default'].update(db_from_env)
 
 rollbar.init(**ROLLBAR)
