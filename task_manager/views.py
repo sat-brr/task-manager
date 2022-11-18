@@ -1,8 +1,5 @@
-from django.shortcuts import render
+from django.views.generic import TemplateView
 
 
-def home_page(request):
-    if request.user.is_authenticated:
-        return render(request, 'home_auth.html')
-    else:
-        return render(request, 'home.html')
+class MainPage(TemplateView):
+    template_name = 'main.html'

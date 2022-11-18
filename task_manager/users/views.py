@@ -1,9 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.utils.translation import gettext as _
-from django.views import View
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.views import LogoutView, LoginView
 from django.contrib.auth.models import User
 from task_manager.users.forms import RegisterForm, LoginForm
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.views.generic import UpdateView, DeleteView, CreateView, ListView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
@@ -20,57 +20,31 @@ class UserCreate(SuccessMessageMixin, CreateView):
     success_message = _('Пользователь успешно зарегистрирован')
 
 
-class UserLogin(View):
+class UserLogin(SuccessMessageMixin, LoginView):
 
-    form_class = LoginForm()
+    form_class = LoginForm
     template_name = 'users/user_login.html'
-
-    def get(self, request):
-        return render(request, self.template_name, context={
-            'form': self.form_class
-        })
-
-    def post(self, request):
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(username=username, password=password)
-        if user:
-            login(request, user)
-            messages.success(request, _('Вы залогинены'))
-            return redirect(reverse_lazy('home'))
-        else:
-            messages.error(request, _("""Пожалуйста, введите правильные
-                                    имя пользователя и пароль.
-                                    Оба поля могут быть чувствительны
-                                    к регистру."""))
-            return render(request, self.template_name, context={
-                'form': self.form_class
-            })
+    next_page = reverse_lazy("main")
+    success_message = _('Вы залогинены')
 
 
-class UserLogout(View):
+class UserLogout(LogoutView):
+    next_page = reverse_lazy('main')
 
-    def post(self, request):
-        logout(request)
+    def dispatch(self, request, *args, **kwargs):
         messages.info(request, _('Вы разлогинены'))
-        return redirect(reverse_lazy('home'))
+        return super().dispatch(request, *args, **kwargs)
 
 
 class UsersPage(ListView):
 
     model = User
-    template_name = ''
+    template_name = 'users/users.html'
     context_object_name = 'users'
 
-    def get(self, request):
-        if not request.user.is_authenticated:
-            self.template_name = "users/users.html"
-        else:
-            self.template_name = "users/users_auth.html"
-        return super().get(request)
 
-
-class UpdateUser(CustomLoginRequired, SuccessMessageMixin, UpdateView):
+class UpdateUser(CustomLoginRequired, UserPassesTestMixin,
+                 SuccessMessageMixin, UpdateView):
 
     template_name = 'users/update_user.html'
     model = User
@@ -78,28 +52,32 @@ class UpdateUser(CustomLoginRequired, SuccessMessageMixin, UpdateView):
     success_url = reverse_lazy('users_list')
     success_message = _("Пользователь успешно изменён.")
 
-    def get(self, request, pk, *args, **kwargs):
-        if request.user.id != pk:
-            messages.error(request, _("""У вас нет прав для
-                                    изменения другого пользователя."""))
-            return redirect(reverse_lazy('users_list'))
+    def test_func(self):
         self.object = self.get_object()
-        return super().get(request, *args, **kwargs)
+        return self.request.user.pk == self.object.pk
+
+    def handle_no_permission(self):
+        messages.error(self.request, _("""У вас нет прав для
+                                    изменения другого пользователя."""))
+        return redirect(reverse_lazy('users_list'))
 
 
-class RemoverUser(CustomLoginRequired, SuccessMessageMixin, DeleteView):
+class RemoverUser(CustomLoginRequired, UserPassesTestMixin,
+                  SuccessMessageMixin, DeleteView):
 
     template_name = 'users/delete_user.html'
     model = User
     success_url = reverse_lazy('users_list')
     success_message = _("Пользователь успешно удалён.")
 
-    def get(self, request, pk):
-        if request.user.id != pk:
-            messages.error(request, _("""У Вас нет прав для
-                                    удаления другого пользователя."""))
-            return redirect(reverse_lazy('users_list'))
-        return super().get(request)
+    def test_func(self):
+        self.object = self.get_object()
+        return self.request.user.pk == self.object.pk
+
+    def handle_no_permission(self):
+        messages.error(self.request, _("""У Вас нет прав для
+                                  удаления другого пользователя."""))
+        return redirect(reverse_lazy('users_list'))
 
     def post(self, request, *args, **kwargs):
         if self.get_object().author.first() or self.get_object().tasks.first():

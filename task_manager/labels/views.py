@@ -42,7 +42,7 @@ class DeleteLabel(CustomLoginRequired, SuccessMessageMixin, DeleteView):
     success_message = _("Метка успешно удалена")
 
     def post(self, request, *args, **kwargs):
-        if self.get_object().task_set.all():
+        if self.get_object().task_set.first():
             messages.error(request, _("""Невозможно удалить метку,
                                       потому что она используется"""))
             return redirect(reverse_lazy('labels_list'))

@@ -1,10 +1,9 @@
-{% extends 'base_auth.html' %}
+{% extends 'base.html' %}
 {% load i18n %}
 
 {% block content %}
-<div class="container wrapper flex-grow-1">
-    <h1 class="my-4">{% translate "Статусы" %} </h1> 
-    <br>  
+<h1 class="my-4">{% translate "Статусы" %} </h1> 
+<br>  
 <a class="nav-link" href="/statuses/create/">{% translate "Создать статус" %}</a>
 <table class="table table-striped">
     <thead>
@@ -30,5 +29,4 @@
         {% endfor %}
     </tbody>
 </table>
-</div>
 {% endblock %}

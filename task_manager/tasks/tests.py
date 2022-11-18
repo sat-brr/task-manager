@@ -52,10 +52,10 @@ class TestTask(TestCase):
 
         self.assertEqual(response.status_code, 302)
 
-        task = Task.objects.first()
+        updated_task = Task.objects.get(pk=task.pk)
 
-        self.assertEqual(task.name, context['name'])
-        self.assertEqual(task.executor.pk, context['executor'])
+        self.assertEqual(updated_task.name, context['name'])
+        self.assertEqual(updated_task.executor.pk, context['executor'])
 
     def test_delete_task(self):
         task = Task.objects.first()

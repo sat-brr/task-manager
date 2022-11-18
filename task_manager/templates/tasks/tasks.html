@@ -1,11 +1,10 @@
-{% extends 'base_auth.html' %}
+{% extends 'base.html' %}
 {% load i18n %}
 {% load bootstrap4 %}
 
 {% block content %}
-<div class="container wrapper flex-grow-1">
-    <h1 class="my-4">{% translate "Задачи" %} </h1> 
-    <br>  
+<h1 class="my-4">{% translate "Задачи" %} </h1> 
+<br>  
 <a class="nav-link" href="/tasks/create/">{% translate "Создать задачу" %}</a>
 <div class="card">
     <div class="card-body bg-light">
@@ -46,5 +45,4 @@
         {% endfor %}
     </tbody>
 </table>
-</div>
 {% endblock %}

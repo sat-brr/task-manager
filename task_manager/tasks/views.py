@@ -4,6 +4,7 @@ from task_manager.tasks.models import Task
 from django.views.generic import UpdateView, DeleteView, CreateView, DetailView
 from task_manager.mixins import CustomLoginRequired
 from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.mixins import UserPassesTestMixin
 from task_manager.tasks.forms import CreateTaskForm, TasksFilterForm
 from django.contrib import messages
 from django_filters.views import FilterView
@@ -39,19 +40,21 @@ class UpdateTask(CustomLoginRequired, SuccessMessageMixin, UpdateView):
     success_message = _("Задача успешно изменена")
 
 
-class DeleteTask(CustomLoginRequired, SuccessMessageMixin, DeleteView):
+class DeleteTask(CustomLoginRequired, UserPassesTestMixin,
+                 SuccessMessageMixin, DeleteView):
 
     template_name = 'tasks/delete_task.html'
     model = Task
     success_url = reverse_lazy('tasks_list')
     success_message = _("Задача успешно удалена")
 
-    def get(self, request, pk):
-        task = Task.objects.get(id=pk)
-        if task.author.id != request.user.id:
-            messages.error(request, _("Задачу может удалить только её автор"))
-            return redirect(reverse_lazy('tasks_list'))
-        return super().get(request)
+    def test_func(self):
+        self.object = self.get_object()
+        return self.object.author.id == self.request.user.id
+
+    def handle_no_permission(self):
+        messages.error(self.request, _("Задачу может удалить только её автор"))
+        return redirect(reverse_lazy('tasks_list'))
 
 
 class DetailTask(CustomLoginRequired, DetailView):
