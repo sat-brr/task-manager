@@ -1,12 +1,14 @@
 from django.test import TestCase, Client
 from django.contrib.auth import get_user_model
 from task_manager.labels.models import Label
+from task_manager.tasks.models import Task
+from task_manager.statuses.models import Status
 from django.urls import reverse
 # Create your tests here.
 
 
 class TestLabelsCrud(TestCase):
-    fixtures = ['user.json', 'label.json']
+    fixtures = ['user.json', 'label.json', 'task.json', 'status.json']
 
     def setUp(self):
         self.client = Client()
@@ -49,3 +51,17 @@ class TestLabelsCrud(TestCase):
 
         self.assertEqual(response.status_code, 302)
         self.assertEqual(Label.objects.count(), 0)
+
+        new_label = Label.objects.create(name='NewLabel')
+        task = Task.objects.create(author=get_user_model().objects.first(),
+                                   name='TestDelete',
+                                   status=Status.objects.first())
+        task.labels.set([new_label.id])
+
+        response = self.client.post(reverse('delete_label',
+                                            args=[new_label.pk]))
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(Label.objects.count(), 1)
+        self.assertEqual(Label.objects.first().name, new_label.name)
+        self.assertEqual(new_label.task_set.first().id, task.id)
