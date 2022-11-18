@@ -94,9 +94,11 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
-    } if DEBUG else db_from_env
+    }
 }
 
+if DEBUG:
+    DATABASES['default'].update(db_from_env)
 # db_from_env = dj_database_url.config(default=os.getenv("DATABASE_URL"),
 #                                      conn_max_age=600)
 # Password validation
