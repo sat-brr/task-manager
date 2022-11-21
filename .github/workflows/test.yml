@@ -29,6 +29,7 @@ jobs:
         env:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
           CC_TEST_REPORTER_ID: ${{ secrets.TEST_REPORTER_ID }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL}}
         with:
           coverageCommand: make test-coverage
           debug: true
