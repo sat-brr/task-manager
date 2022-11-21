@@ -20,18 +20,18 @@ class LabelsPage(CustomLoginRequired, ListView):
 class CreateLabel(CustomLoginRequired, SuccessMessageMixin, CreateView):
 
     form_class = CreateLabelForm
-    template_name = 'labels/create_label.html'
+    template_name = 'labels/create_or_update_label.html'
     success_url = reverse_lazy('labels_list')
-    success_message = _("Метка успешно создана")
+    success_message = _("The label was created successfully")
 
 
 class UpdateLabel(CustomLoginRequired, SuccessMessageMixin, UpdateView):
 
     form_class = CreateLabelForm
     model = Label
-    template_name = 'labels/update_label.html'
+    template_name = 'labels/create_or_update_label.html'
     success_url = reverse_lazy('labels_list')
-    success_message = _("Метка успешно изменена")
+    success_message = _("Label changed successfully")
 
 
 class DeleteLabel(CustomLoginRequired, SuccessMessageMixin, DeleteView):
@@ -39,11 +39,11 @@ class DeleteLabel(CustomLoginRequired, SuccessMessageMixin, DeleteView):
     model = Label
     template_name = 'labels/delete_label.html'
     success_url = reverse_lazy('labels_list')
-    success_message = _("Метка успешно удалена")
+    success_message = _("The label was successfully deleted")
 
     def post(self, request, *args, **kwargs):
         if self.get_object().task_set.first():
-            messages.error(request, _("""Невозможно удалить метку,
-                                      потому что она используется"""))
+            messages.error(request, _("""Unable to delete a label,
+                                      because it is used"""))
             return redirect(reverse_lazy('labels_list'))
         return super().post(request, *args, **kwargs)

@@ -17,22 +17,22 @@ class UserCreate(SuccessMessageMixin, CreateView):
     form_class = RegisterForm
     template_name = 'users/user_create.html'
     success_url = reverse_lazy('login')
-    success_message = _('Пользователь успешно зарегистрирован')
+    success_message = _('The user has been successfully registered')
 
 
 class UserLogin(SuccessMessageMixin, LoginView):
 
     form_class = LoginForm
     template_name = 'users/user_login.html'
-    next_page = reverse_lazy("main")
-    success_message = _('Вы залогинены')
+    next_page = reverse_lazy("home")
+    success_message = _('You are logged in')
 
 
 class UserLogout(LogoutView):
-    next_page = reverse_lazy('main')
+    next_page = reverse_lazy('home')
 
     def dispatch(self, request, *args, **kwargs):
-        messages.info(request, _('Вы разлогинены'))
+        messages.info(request, _('You are logged out'))
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -50,15 +50,14 @@ class UpdateUser(CustomLoginRequired, UserPassesTestMixin,
     model = User
     form_class = RegisterForm
     success_url = reverse_lazy('users_list')
-    success_message = _("Пользователь успешно изменён.")
+    success_message = _("The user has been successfully changed")
 
     def test_func(self):
-        self.object = self.get_object()
-        return self.request.user.pk == self.object.pk
+        return self.request.user.pk == self.get_object().pk
 
     def handle_no_permission(self):
-        messages.error(self.request, _("""У вас нет прав для
-                                    изменения другого пользователя."""))
+        messages.error(self.request, _("""You don't have the rights to
+                                       other user's changes"""))
         return redirect(reverse_lazy('users_list'))
 
 
@@ -68,20 +67,19 @@ class RemoverUser(CustomLoginRequired, UserPassesTestMixin,
     template_name = 'users/delete_user.html'
     model = User
     success_url = reverse_lazy('users_list')
-    success_message = _("Пользователь успешно удалён.")
+    success_message = _("The user has been successfully deleted.")
 
     def test_func(self):
-        self.object = self.get_object()
-        return self.request.user.pk == self.object.pk
+        return self.request.user.pk == self.get_object().pk
 
     def handle_no_permission(self):
-        messages.error(self.request, _("""У Вас нет прав для
-                                  удаления другого пользователя."""))
+        messages.error(self.request, _("""You don't have the rights to
+                                       deleting another user."""))
         return redirect(reverse_lazy('users_list'))
 
     def post(self, request, *args, **kwargs):
         if self.get_object().author.first() or self.get_object().tasks.first():
-            messages.error(request, _("""Невозможно удалить пользователя,
-                                      потому что он используется"""))
+            messages.error(request, _("""The user cannot be deleted,
+                                      because it is used"""))
             return redirect(reverse_lazy('users_list'))
         return super().post(request, *args, **kwargs)

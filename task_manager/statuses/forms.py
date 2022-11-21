@@ -4,7 +4,7 @@ from django.utils.translation import gettext as _
 
 
 class CreateStatusForm(forms.ModelForm):
-    name = forms.CharField(label=_('Имя'),
+    name = forms.CharField(label=_('Name'),
                            widget=forms.TextInput(attrs={'class': 'form-input'})
                            )
 

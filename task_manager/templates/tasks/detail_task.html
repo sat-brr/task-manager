@@ -2,7 +2,7 @@
 {% load i18n %}
 
 {% block content %}
-<h1 class="my-4">{% translate "Просмотр задачи" %}</h1>
+<h1>{% translate "Viewing a task" %}</h1>
 <div class="card">
     <div class="card-header bg-secondary text-white">
         <h2>{{ task.name }}</h2>
@@ -12,24 +12,24 @@
         <hr>
         <div class="container">
             <div class="row p-1">
-                <div class="col">{% translate "Автор" %}</div>
+                <div class="col">{% translate "Author" %}</div>
                 <div class="col">{{ task.author.first_name}} {{ task.author.last_name }}</div>
             </div>
             <div class="row p-1">
-                <div class="col">{% translate "Исполнитель" %}</div>
+                <div class="col">{% translate "Executor" %}</div>
                 <div class="col">{{ task.executor.first_name }} {{ task.executor.last_name }}</div>
             </div>
             <div class="row p-1">
-                <div class="col">{% translate "Статус" %}</div>
+                <div class="col">{% translate "Status" %}</div>
                 <div class="col">{{ task.status.name}}</div>
             </div>
             <div class="row p-1">
-                <div class="col">{% translate "Дата создания" %}</div>
+                <div class="col">{% translate "Date of creation" %}</div>
                 <div class="col">{{ task.date_created }}</div>
             </div>
             <div class="row p-1">
                 <div class="col">
-                    <h6>{% translate "Метки" %}:</h6>
+                    <h6>{% translate "Labels" %}:</h6>
                     <ul>
                         {% for label in task.labels.all %}
                         <li>{{  label.name }}</li>
@@ -39,9 +39,9 @@
             </div>
             <div class="row p-1">
                 <div class="col">
-                    <a href="{% url 'update_task' task.id %}">{% translate "Изменить" %}</a>
+                    <a href="{% url 'update_task' task.id %}">{% translate "Edit" %}</a>
                     <br>
-                    <a href="{% url 'delete_task' task.id %}">{% translate "Удалить" %}</a>
+                    <a href="{% url 'delete_task' task.id %}">{% translate "Delete" %}</a>
                 </div>
             </div>
         </div>

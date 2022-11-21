@@ -24,7 +24,7 @@ class CreateTask(CustomLoginRequired, SuccessMessageMixin, CreateView):
     form_class = CreateTaskForm
     template_name = 'tasks/create_task.html'
     success_url = reverse_lazy('tasks_list')
-    success_message = _("Задача успешно создана")
+    success_message = _("The task was successfully created")
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -37,7 +37,7 @@ class UpdateTask(CustomLoginRequired, SuccessMessageMixin, UpdateView):
     model = Task
     form_class = CreateTaskForm
     success_url = reverse_lazy('tasks_list')
-    success_message = _("Задача успешно изменена")
+    success_message = _("The task has been successfully changed")
 
 
 class DeleteTask(CustomLoginRequired, UserPassesTestMixin,
@@ -46,14 +46,15 @@ class DeleteTask(CustomLoginRequired, UserPassesTestMixin,
     template_name = 'tasks/delete_task.html'
     model = Task
     success_url = reverse_lazy('tasks_list')
-    success_message = _("Задача успешно удалена")
+    success_message = _("The task was successfully deleted")
 
     def test_func(self):
         self.object = self.get_object()
         return self.object.author.id == self.request.user.id
 
     def handle_no_permission(self):
-        messages.error(self.request, _("Задачу может удалить только её автор"))
+        messages.error(self.request, _("""A task can only
+                                       be deleted by its author"""))
         return redirect(reverse_lazy('tasks_list'))
 
 

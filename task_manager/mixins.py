@@ -9,7 +9,7 @@ class CustomLoginRequired(LoginRequiredMixin):
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            messages.error(request, _("""Вы не авторизованы!
-                                      Пожалуйста, выполните вход."""))
+            messages.error(request, _("""You are not logged in!
+                                      Please log in."""))
             return redirect(reverse_lazy('login'))
         return super().dispatch(request, *args, **kwargs)

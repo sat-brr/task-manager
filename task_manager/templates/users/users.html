@@ -3,15 +3,15 @@
 
 {% block content %}
 <div class="table-responsive">
-<h1>{% translate "Пользователи" %}</h1>
+<h1>{% translate "Users" %}</h1>
     <br>
     <table class="table table-striped">
       <thead>
         <tr>
-            <th>{% translate "ID" %}</th>
-            <th>{% translate "Имя пользователя" %}</th>
-            <th>{% translate "Полное имя" %}</th>
-            <th>{% translate "Дата создания" %}</th>
+            <th>ID</th>
+            <th>{% translate "Username" %}</th>
+            <th>{% translate "Full name" %}</th>
+            <th>{% translate "Date of creation" %}</th>
             <th></th>
         </tr>
       </thead>
@@ -23,9 +23,9 @@
                 <td>{{ user.first_name }} {{ user.last_name }}</td>
                 <td>{{ user.date_joined }}</td>
                 <td>
-                    <a href="{% url 'update_user' user.id %}">{% translate "Изменить" %}</a>
+                    <a href="{% url 'update_user' user.id %}">{% translate "Edit" %}</a>
                     <br>
-                    <a href="{% url 'delete_user' user.id %}">{% translate "Удалить" %}</a>
+                    <a href="{% url 'delete_user' user.id %}">{% translate "Delete" %}</a>
                 </td>
             </tr>
             {% endfor %}   

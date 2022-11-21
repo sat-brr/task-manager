@@ -3,11 +3,11 @@
 {% load bootstrap4 %}
 
 {% block content %}
-<h1 class="my-4">{% translate "Удаление задачи" %}</h1>
+<h1>{% translate "Deleting a task" %}</h1>
 <br>
-<p>{% translate "Вы уверены, что хотите удалить" %} {{ task.name }}?</p>
+<p>{% translate "Are you sure you want to delete" %} {{ task.name }}?</p>
 <form method="POST">
     {% csrf_token %}
-    <button type="submit" class="btn btn-danger">{% translate "Да, удалить" %}</button>
+    <button type="submit" class="btn btn-danger">{% translate "Yes, delete" %}</button>
 </form>
 {% endblock %}

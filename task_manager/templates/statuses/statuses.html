@@ -2,15 +2,15 @@
 {% load i18n %}
 
 {% block content %}
-<h1 class="my-4">{% translate "Статусы" %} </h1> 
+<h1>{% translate "Statuses" %} </h1> 
 <br>  
-<a class="nav-link" href="/statuses/create/">{% translate "Создать статус" %}</a>
+<a class="nav-link" href="{% url 'create_status' %}">{% translate "Create a status" %}</a>
 <table class="table table-striped">
     <thead>
       <tr>
         <th>ID</th>
-        <th>{% translate "Имя" %}</th>
-        <th>{% translate "Дата создания" %}</th>
+        <th>{% translate "Name" %}</th>
+        <th>{% translate "Date of creation" %}</th>
         <th></th>
       </tr>
     </thead>
@@ -21,9 +21,9 @@
             <td>{{ status.name }}</td>
             <td>{{ status.date_created }}</td>
             <td>
-                <a href="{% url 'update_status' status.id %}">{% translate "Изменить" %}</a>
+                <a href="{% url 'update_status' status.id %}">{% translate "Edit" %}</a>
                 <br>
-                <a href="{% url 'delete_status' status.id %}">{% translate "Удалить" %}</a>
+                <a href="{% url 'delete_status' status.id %}">{% translate "Delete" %}</a>
             </td>
         </tr>
         {% endfor %}

@@ -15,7 +15,7 @@ class CreateStatus(CustomLoginRequired, SuccessMessageMixin, CreateView):
     form_class = CreateStatusForm
     template_name = 'statuses/create_status.html'
     success_url = reverse_lazy('statuses_list')
-    success_message = _("Статус успешно создан")
+    success_message = _("Status successfully created")
 
 
 class StatusesPage(CustomLoginRequired, ListView):
@@ -30,7 +30,7 @@ class UpdateStatus(CustomLoginRequired, SuccessMessageMixin, UpdateView):
     model = Status
     form_class = CreateStatusForm
     success_url = reverse_lazy('statuses_list')
-    success_message = _("Статус успешно изменён")
+    success_message = _("Status successfully changed")
 
 
 class DeleteStatus(CustomLoginRequired, SuccessMessageMixin, DeleteView):
@@ -38,11 +38,11 @@ class DeleteStatus(CustomLoginRequired, SuccessMessageMixin, DeleteView):
     template_name = 'statuses/delete_status.html'
     model = Status
     success_url = reverse_lazy('statuses_list')
-    success_message = _("Статус успешно удалён")
+    success_message = _("Status successfully deleted")
 
     def post(self, request, *args, **kwargs):
         if self.get_object().task_set.first():
-            messages.error(request, _("""Невозможно удалить статус,
-                                      потому что он используется"""))
+            messages.error(request, _("""It is not possible to delete the status
+                                      because it is being used"""))
             return redirect(reverse_lazy('statuses_list'))
         return super().post(request, *args, **kwargs)

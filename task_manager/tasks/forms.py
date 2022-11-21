@@ -15,22 +15,22 @@ class MyModelChoiceField(forms.ModelChoiceField):
 
 
 class CreateTaskForm(forms.ModelForm):
-    name = forms.CharField(label=_('Имя'),
+    name = forms.CharField(label=_('Name'),
                            widget=forms.TextInput(attrs={'class': 'form-input'})
                            )
-    description = forms.CharField(label=_('Описание'),
+    description = forms.CharField(label=_('Description'),
                                   required=False,
                                   widget=forms.Textarea(attrs={
                                                         'cols': '40',
                                                         'rows': '10',
                                                         'class': 'form-input'})
                                   )
-    status = forms.ModelChoiceField(label=_('Статус'),
+    status = forms.ModelChoiceField(label=_('Status'),
                                     queryset=Status.objects.all())
-    executor = MyModelChoiceField(label=_('Исполнитель'),
+    executor = MyModelChoiceField(label=_('Executor'),
                                   queryset=User.objects.all(),
                                   required=False)
-    labels = forms.ModelMultipleChoiceField(label=_('Метки'),
+    labels = forms.ModelMultipleChoiceField(label=_('Labels'),
                                             queryset=Label.objects.all(),
                                             required=False)
 
@@ -40,7 +40,7 @@ class CreateTaskForm(forms.ModelForm):
 
 
 class TasksFilterForm(django_filters.FilterSet):
-    status = django_filters.ModelChoiceFilter(label=_('Статус'),
+    status = django_filters.ModelChoiceFilter(label=_('Status'),
                                               queryset=Status.objects.all())
     all_executives = User.objects.values_list(
         'id',
@@ -48,14 +48,14 @@ class TasksFilterForm(django_filters.FilterSet):
         named=True,
     ).all()
 
-    executor = django_filters.ChoiceFilter(label=_('Исполнитель'),
+    executor = django_filters.ChoiceFilter(label=_('Executor'),
                                            choices=all_executives)
-    labels = django_filters.ModelChoiceFilter(label=_('Метка'),
+    labels = django_filters.ModelChoiceFilter(label=_('Label'),
                                               queryset=Label.objects.all())
     author = django_filters.BooleanFilter(widget=forms.CheckboxInput,
                                           field_name='author',
                                           method='only_author',
-                                          label=_("Только свои задачи"))
+                                          label=_("Only your own tasks"))
 
     class Meta:
         model = Task

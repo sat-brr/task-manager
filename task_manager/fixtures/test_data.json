@@ -1,0 +1,45 @@
+{
+    "new": {
+        "user": {
+            "username": "TestUser",
+            "first_name": "Test55",
+            "last_name": "Test66",
+            "password1": "Qazrfv4545",
+            "password2": "Qazrfv4545"
+        },
+        "label": {
+            "name": "TestLabelNew"
+        },
+        "status": {
+            "name": "TestStatusNew"
+        },
+        "task": {
+            "name": "NewTaskTest",
+            "author": 1,
+            "status": 1,
+            "executor":1,
+            "labels": 1
+        }
+    },
+    "exist_records": {
+        "user_id_1": {
+            "username": "QWEwq",
+            "first_name": "Qwe",
+            "last_name": "Ewq",
+            "password":"Qazedc357"
+        },
+        "label_id_1": {
+            "name": "TestLabel"
+        },
+        "status_id_1": {
+            "name": "TestStatus"
+        },
+        "task_id_1": {
+            "author": 1,
+            "name": "TestTask",
+            "description": "testing",
+            "status": 1,
+            "executor": null
+        }
+    }
+}

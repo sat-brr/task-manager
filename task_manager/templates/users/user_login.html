@@ -3,11 +3,11 @@
 {% load bootstrap4 %}
 
 {% block content %}
-<h1>{% translate "Вход" %}</h1>
+<h1>{% translate "Login" %}</h1>
 <br>
 <form method="post">
     {% csrf_token %}
     {% bootstrap_form form %}
-    <button type="submit" class="btn btn-primary">{% translate "Войти" %}</button>
+    <button type="submit" class="btn btn-primary">{% translate "Login" %}</button>
 </form>
 {% endblock %}

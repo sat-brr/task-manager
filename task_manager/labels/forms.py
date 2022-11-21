@@ -4,7 +4,7 @@ from task_manager.labels.models import Label
 
 
 class CreateLabelForm(forms.ModelForm):
-    name = forms.CharField(label=_('Имя'),
+    name = forms.CharField(label=_('Name'),
                            widget=forms.TextInput(attrs={'class': 'form-input'})
                            )
 
