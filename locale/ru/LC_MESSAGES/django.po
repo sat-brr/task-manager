@@ -298,14 +298,14 @@ msgid "You are logged out"
 msgstr "Вы разлогинены"
 
 #: task_manager/users/views.py:53
-msgid "The user has been successfully changed."
+msgid "The user has been successfully changed"
 msgstr "Пользователь успешно изменён"
 
 #: task_manager/users/views.py:59
 msgid ""
 "You don't have the rights to\n"
-"                                       other user's changes."
-msgstr "У вас нет прав для изменения другого пользователя."
+"                                       other user's changes"
+msgstr "У вас нет прав для изменения другого пользователя"
 
 #: task_manager/users/views.py:70
 msgid "The user has been successfully deleted."
@@ -314,7 +314,7 @@ msgstr "Пользователь успешно удалён"
 #: task_manager/users/views.py:76
 msgid ""
 "You don't have the rights to\n"
-"                                       deleting another user."
+"                                       deleting another user"
 msgstr "У вас нет прав для удаления другого пользователя."
 
 #: task_manager/users/views.py:82
