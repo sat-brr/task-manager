@@ -141,9 +141,12 @@ msgstr "Задачи"
 
 #: task_manager/templates/base.html:40
 #: task_manager/templates/users/user_login.html:6
-#: task_manager/templates/users/user_login.html:11
 msgid "Login"
 msgstr "Вход"
+
+#: task_manager/templates/users/user_login.html:11
+msgid "Enter"
+msgstr "Войти"
 
 #: task_manager/templates/base.html:43
 #: task_manager/templates/users/user_create.html:6
