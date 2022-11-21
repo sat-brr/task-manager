@@ -22,19 +22,23 @@
         }
     },
     "exist_records": {
-        "user_id_1": {
+        "user": {
+            "id": 1,
             "username": "QWEwq",
             "first_name": "Qwe",
             "last_name": "Ewq",
             "password":"Qazedc357"
         },
-        "label_id_1": {
+        "label": {
+            "id": 1,
             "name": "TestLabel"
         },
-        "status_id_1": {
+        "status": {
+            "id": 1,
             "name": "TestStatus"
         },
-        "task_id_1": {
+        "task": {
+            "id": 1,
             "author": 1,
             "name": "TestTask",
             "description": "testing",
