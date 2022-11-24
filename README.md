@@ -43,7 +43,7 @@ make migrations
 ```
 
 #### Select a language:
-Open the task_manager/settings file.py and change the value of the LANGUAGE_CODE variable to 'ru' for Russian localization or 'en' for English.
+Open the file task_manager/settings.py and change the value of the LANGUAGE_CODE variable to 'ru' for Russian localization or 'en' for English.
 
 ### Launch:
 ```
