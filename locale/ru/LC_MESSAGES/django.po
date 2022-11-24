@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-21 18:27+0300\n"
+"POT-Creation-Date: 2022-11-23 13:57+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -111,7 +111,7 @@ msgstr "Задача успешно изменена"
 msgid "The task was successfully deleted"
 msgstr "Задача успешно удалена"
 
-#: task_manager/tasks/views.py:56
+#: task_manager/tasks/views.py:55
 msgid ""
 "A task can only\n"
 "                                       be deleted by its author"
@@ -135,7 +135,7 @@ msgstr "Пользователи"
 msgid "Statuses"
 msgstr "Статусы"
 
-#: task_manager/templates/base.html:32
+#: task_manager/templates/base.html:32 task_manager/templates/home.html:12
 #: task_manager/templates/tasks/tasks.html:6
 msgid "Tasks"
 msgstr "Задачи"
@@ -144,6 +144,10 @@ msgstr "Задачи"
 #: task_manager/templates/users/user_login.html:6
 msgid "Login"
 msgstr "Вход"
+
+#: task_manager/templates/home.html:9
+msgid "registration"
+msgstr "регистрацию"
 
 #: task_manager/templates/base.html:43
 #: task_manager/templates/users/user_create.html:6
@@ -154,13 +158,25 @@ msgstr "Регистрация"
 msgid "Logout"
 msgstr "Выход"
 
-#: task_manager/templates/home.html:8
-msgid "Greetings from Hexlet!"
-msgstr "Привет от Хекслета!"
+#: task_manager/templates/home.html:7
+msgid "Welcome to the Task Manager!"
+msgstr "Добро пожаловать в Менеджер Задач!"
 
 #: task_manager/templates/home.html:9
-msgid "Practical programming courses"
-msgstr "Практические курсы по программированию"
+msgid "To get started, please complete the"
+msgstr "Для того, чтобы начать работу, пройдите"
+
+#: task_manager/templates/home.html:10
+msgid "or"
+msgstr "или"
+
+#: task_manager/templates/home.html:10
+msgid "LogIn"
+msgstr "авторизуйтесь"
+
+#: task_manager/templates/home.html:12
+msgid "Viewing"
+msgstr "Просмотреть"
 
 #: task_manager/templates/labels/create_or_update_label.html:8
 #: task_manager/templates/labels/labels.html:8
@@ -286,11 +302,11 @@ msgstr "Имя пользователя"
 msgid "Full name"
 msgstr "Полное имя"
 
-#: task_manager/users/forms.py:8
+#: task_manager/users/forms.py:10
 msgid "First name"
 msgstr "Имя"
 
-#: task_manager/users/forms.py:9
+#: task_manager/users/forms.py:12
 msgid "Last name"
 msgstr "Фамилия"
 
@@ -335,3 +351,9 @@ msgid ""
 "The user cannot be deleted,\n"
 "                                      because it is used"
 msgstr "Невозможно удалить пользователя, потому что он используется"
+
+#~ msgid "Greetings from Hexlet!"
+#~ msgstr "Привет от Хекслета!"
+
+#~ msgid "Practical programming courses"
+#~ msgstr "Практические курсы по программированию"

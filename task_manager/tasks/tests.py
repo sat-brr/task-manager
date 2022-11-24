@@ -5,14 +5,9 @@ from task_manager.tasks.models import Task
 from task_manager.labels.models import Label
 from django.urls import reverse
 from http import HTTPStatus
-import os
+from task_manager.settings import TEST_DATA_PATH
 import json
 # Create your tests here.
-
-
-FIXTURES_PATH = os.path.abspath('task_manager/fixtures')
-TEST_DATA_PATH = os.path.join(FIXTURES_PATH, 'test_data.json')
-HTTP_FOUND = HTTPStatus.FOUND
 
 
 class TestTask(TestCase):
@@ -20,20 +15,22 @@ class TestTask(TestCase):
 
     def setUp(self):
         self.client = Client()
-        user = get_user_model().objects.first()
-        self.user = user
-        self.client.force_login(user)
+        self.user_1 = get_user_model().objects.first()
+        self.user_2 = get_user_model().objects.last()
+        self.client.force_login(self.user_1)
         self.status = Status.objects.first()
         self.label = Label.objects.first()
-        file = open(TEST_DATA_PATH).read()
-        self.test_data = json.loads(file)
+        self.task = Task.objects.first()
+        with open(TEST_DATA_PATH, 'r') as file:
+            self.test_data = json.loads(file.read())
 
     def test_create_task(self):
 
         response = self.client.post(reverse('create_task'),
                                     data=self.test_data['new']['task'])
 
-        self.assertEqual(response.status_code, HTTP_FOUND)
+        self.assertEqual(response.status_code, HTTPStatus.FOUND)
+        self.assertRedirects(response, reverse('tasks_list'))
 
         task = Task.objects.get(name=self.test_data['new']['task']['name'])
 
@@ -51,7 +48,8 @@ class TestTask(TestCase):
         response = self.client.post(reverse('update_task', args=[task.id]),
                                     data=self.test_data['new']['task'])
 
-        self.assertEqual(response.status_code, HTTP_FOUND)
+        self.assertEqual(response.status_code, HTTPStatus.FOUND)
+        self.assertRedirects(response, reverse('tasks_list'))
 
         updated_task = Task.objects.get(pk=task.pk)
 
@@ -65,5 +63,15 @@ class TestTask(TestCase):
 
         response = self.client.post(reverse('delete_task', args=[task.id]))
 
-        self.assertEqual(response.status_code, HTTP_FOUND)
+        self.assertEqual(response.status_code, HTTPStatus.FOUND)
+        self.assertRedirects(response, reverse('tasks_list'))
         self.assertEqual(Task.objects.count(), 0)
+
+    def test_delete_another_author_task(self):
+        self.client.force_login(self.user_2)
+
+        response = self.client.post(reverse('delete_task', args=[self.task.id]))
+
+        self.assertEqual(response.status_code, HTTPStatus.FOUND)
+        self.assertRedirects(response, reverse('tasks_list'))
+        self.assertNotEqual(Task.objects.get(pk=self.task.id), None)

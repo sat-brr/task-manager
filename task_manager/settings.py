@@ -19,6 +19,9 @@ import rollbar
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+FIXTURES_PATH = os.path.abspath('task_manager/fixtures')
+TEST_DATA_PATH = os.path.join(FIXTURES_PATH, 'test_data.json')
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -30,7 +33,9 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG") == 'True'
 
-ALLOWED_HOSTS = ['webserver', 'localhost', 'task-manager-sat.up.railway.app']
+ALLOWED_HOSTS = ['webserver', 'localhost', 'task-manager-sat.up.railway.app',
+                 '127.0.0.1']
+
 CSRF_TRUSTED_ORIGINS = ['https://*.railway.app']
 
 
@@ -92,13 +97,15 @@ DATABASES = {
                                       conn_max_age=600)
 }
 
+
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME':
-        'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "django.contrib.auth.password_validation"
+        ".UserAttributeSimilarityValidator",
     },
     {
         'NAME':
@@ -113,7 +120,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
@@ -140,6 +146,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 
 ROLLBAR = {
     'access_token': os.getenv("ROLLBAR_TOKEN"),

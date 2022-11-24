@@ -2,11 +2,15 @@
 {% load i18n %}
 
 {% block content %}
-<h1 class="my-4"></h1>
 <div class="card">
   <div class="card-body p-5 bg-light">
-    <div class="display-4">{% translate "Greetings from Hexlet!" %}</div>
-      <p class="lead">{% translate "Practical programming courses" %}</p>
+    <div class="display-4">{% translate "Welcome to the Task Manager!" %}</div>
+      {% if not request.user.is_authenticated %}
+      <p class="lead">{% translate "To get started, please complete the" %} <a href="{% url 'create_user'%}"><b>{% translate "registration" %}</b></a>
+      {% translate "or" %} <a href="{% url 'login' %}"><b>{% translate "LogIn" %}</b></a></p>
+      {% else %}
+      <p class="lead">{% translate "Viewing" %} <a href="{% url 'tasks_list' %}"><b>{% translate "Tasks" %}</b></a></p>
+      {% endif %}
   </div>
 </div>
 {% endblock %}

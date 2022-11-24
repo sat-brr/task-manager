@@ -49,8 +49,7 @@ class DeleteTask(CustomLoginRequired, UserPassesTestMixin,
     success_message = _("The task was successfully deleted")
 
     def test_func(self):
-        self.object = self.get_object()
-        return self.object.author.id == self.request.user.id
+        return self.get_object().author.id == self.request.user.id
 
     def handle_no_permission(self):
         messages.error(self.request, _("""A task can only

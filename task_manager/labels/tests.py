@@ -2,18 +2,11 @@ from django.test import TestCase, Client
 from django.contrib.auth import get_user_model
 from task_manager.labels.models import Label
 from task_manager.tasks.models import Task
-from task_manager.statuses.models import Status
 from django.urls import reverse
 from http import HTTPStatus
-import os
+from task_manager.settings import TEST_DATA_PATH
 import json
 # Create your tests here.
-
-
-HTTP_FOUND = HTTPStatus.FOUND
-HTTP_OK = HTTPStatus.OK
-FIXTURES_PATH = os.path.abspath('task_manager/fixtures')
-TEST_DATA_PATH = os.path.join(FIXTURES_PATH, 'test_data.json')
 
 
 class TestLabelsCrud(TestCase):
@@ -22,15 +15,17 @@ class TestLabelsCrud(TestCase):
     def setUp(self):
         self.client = Client()
         self.user = get_user_model().objects.first()
+        self.label = Label.objects.first()
         self.client.force_login(self.user)
-        file = open(TEST_DATA_PATH).read()
-        self.test_data = json.loads(file)
+        with open(TEST_DATA_PATH, 'r') as file:
+            self.test_data = json.loads(file.read())
 
     def test_create_label(self):
         response = self.client.post(reverse('create_label'),
                                     data=self.test_data['new']['label'])
 
-        self.assertEqual(response.status_code, HTTP_FOUND)
+        self.assertEqual(response.status_code, HTTPStatus.FOUND)
+        self.assertRedirects(response, reverse('labels_list'))
 
         label = Label.objects.last()
 
@@ -41,16 +36,16 @@ class TestLabelsCrud(TestCase):
         response_unique = self.client.post(reverse('create_label'),
                                            data=self.test_data['new']['label'])
 
-        self.assertEqual(response_unique.status_code, HTTP_OK)
+        self.assertEqual(response_unique.status_code, HTTPStatus.OK)
         self.assertEqual(Label.objects.count(), 2)
 
     def test_update_label(self):
-        label = Label.objects.first()
-
-        response = self.client.post(reverse('update_label', args=[label.pk]),
+        response = self.client.post(reverse('update_label',
+                                            args=[self.label.pk]),
                                     data=self.test_data['new']['label'])
 
-        self.assertEqual(response.status_code, HTTP_FOUND)
+        self.assertEqual(response.status_code, HTTPStatus.FOUND)
+        self.assertRedirects(response, reverse('labels_list'))
 
         label_updated = Label.objects.first()
 
@@ -58,23 +53,21 @@ class TestLabelsCrud(TestCase):
                          self.test_data['new']['label']['name'])
 
     def test_delete_label(self):
-        label = Label.objects.first()
+        response = self.client.post(reverse('delete_label',
+                                            args=[self.label.pk]))
 
-        response = self.client.post(reverse('delete_label', args=[label.pk]))
-
-        self.assertEqual(response.status_code, HTTP_FOUND)
+        self.assertEqual(response.status_code, HTTPStatus.FOUND)
+        self.assertRedirects(response, reverse('labels_list'))
         self.assertEqual(Label.objects.count(), 0)
 
-        new_label = Label.objects.create(name=label.name)
-        task = Task.objects.create(author=self.user,
-                                   name=self.test_data['new']['task']['name'],
-                                   status=Status.objects.first())
-        task.labels.set([new_label.id])
+    def test_delete_used_label(self):
+        task = Task.objects.first()
+        task.labels.set([self.label.id])
 
         response = self.client.post(reverse('delete_label',
-                                            args=[new_label.pk]))
+                                            args=[self.label.id]))
 
-        self.assertEqual(response.status_code, HTTP_FOUND)
+        self.assertEqual(response.status_code, HTTPStatus.FOUND)
+        self.assertRedirects(response, reverse('labels_list'))
         self.assertEqual(Label.objects.count(), 1)
-        self.assertEqual(Label.objects.first().name, new_label.name)
-        self.assertEqual(new_label.task_set.first().id, task.id)
+        self.assertEqual(Label.objects.first().id, self.label.id)
