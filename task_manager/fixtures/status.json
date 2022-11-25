@@ -1,0 +1,18 @@
+[
+{
+    "model": "statuses.status",
+    "pk": 1,
+    "fields": {
+        "name": "UsedStatus",
+        "date_created": "2022-11-10T05:33:41.182Z"
+    }
+},
+{
+    "model": "statuses.status",
+    "pk": 2,
+    "fields": {
+        "name": "UnusedStatus",
+        "date_created": "2022-11-10T05:33:42.182Z"
+    }
+}
+]

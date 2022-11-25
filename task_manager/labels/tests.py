@@ -4,8 +4,8 @@ from task_manager.labels.models import Label
 from task_manager.tasks.models import Task
 from django.urls import reverse
 from http import HTTPStatus
-from task_manager.settings import TEST_DATA_PATH
-import json
+from task_manager.settings import load_test_data
+from django.contrib.messages import get_messages
 # Create your tests here.
 
 
@@ -17,10 +17,11 @@ class TestLabelsCrud(TestCase):
         self.user = get_user_model().objects.first()
         self.label = Label.objects.first()
         self.client.force_login(self.user)
-        with open(TEST_DATA_PATH, 'r') as file:
-            self.test_data = json.loads(file.read())
+        self.test_data = load_test_data()
+        self.count = Label.objects.count()
 
     def test_create_label(self):
+
         response = self.client.post(reverse('create_label'),
                                     data=self.test_data['new']['label'])
 
@@ -29,15 +30,18 @@ class TestLabelsCrud(TestCase):
 
         label = Label.objects.last()
 
-        self.assertEqual(Label.objects.count(), 2)
+        self.assertEqual(Label.objects.count(), self.count + 1)
         self.assertEqual(label.name,
                          self.test_data['new']['label']['name'])
 
-        response_unique = self.client.post(reverse('create_label'),
-                                           data=self.test_data['new']['label'])
+    def test_create_label_not_unique(self):
 
-        self.assertEqual(response_unique.status_code, HTTPStatus.OK)
-        self.assertEqual(Label.objects.count(), 2)
+        response = self.client.post(reverse('create_label'), data={
+            'name': self.label.name
+        })
+
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertEqual(Label.objects.count(), self.count)
 
     def test_update_label(self):
         response = self.client.post(reverse('update_label',
@@ -58,7 +62,7 @@ class TestLabelsCrud(TestCase):
 
         self.assertEqual(response.status_code, HTTPStatus.FOUND)
         self.assertRedirects(response, reverse('labels_list'))
-        self.assertEqual(Label.objects.count(), 0)
+        self.assertEqual(Label.objects.count(), self.count - 1)
 
     def test_delete_used_label(self):
         task = Task.objects.first()
@@ -69,5 +73,9 @@ class TestLabelsCrud(TestCase):
 
         self.assertEqual(response.status_code, HTTPStatus.FOUND)
         self.assertRedirects(response, reverse('labels_list'))
-        self.assertEqual(Label.objects.count(), 1)
+
+        message = list(get_messages(response.wsgi_request))
+
+        self.assertEqual(message[0].tags, 'error')
+        self.assertEqual(Label.objects.count(), self.count)
         self.assertEqual(Label.objects.first().id, self.label.id)

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-23 13:57+0300\n"
+"POT-Creation-Date: 2022-11-25 15:22+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -145,10 +145,6 @@ msgstr "Задачи"
 msgid "Login"
 msgstr "Вход"
 
-#: task_manager/templates/home.html:9
-msgid "registration"
-msgstr "регистрацию"
-
 #: task_manager/templates/base.html:43
 #: task_manager/templates/users/user_create.html:6
 msgid "Registration"
@@ -165,6 +161,10 @@ msgstr "Добро пожаловать в Менеджер Задач!"
 #: task_manager/templates/home.html:9
 msgid "To get started, please complete the"
 msgstr "Для того, чтобы начать работу, пройдите"
+
+#: task_manager/templates/home.html:9
+msgid "registration"
+msgstr "регистрацию"
 
 #: task_manager/templates/home.html:10
 msgid "or"
@@ -327,9 +327,11 @@ msgid "The user has been successfully changed"
 msgstr "Пользователь успешно изменён"
 
 #: task_manager/users/views.py:59
-msgid ""
-"You don't have the rights to\n"
-"                                       other user's changes"
+#, fuzzy
+#| msgid ""
+#| "You don't have the rights to\n"
+#| "                                       other user's changes"
+msgid "You don't have the rights to other user's changes"
 msgstr "У вас нет прав для изменения другого пользователя"
 
 #: task_manager/users/views.py:70
@@ -341,19 +343,13 @@ msgstr "Пользователь успешно удалён"
 #| msgid ""
 #| "You don't have the rights to\n"
 #| "                                       deleting another user"
-msgid ""
-"You don't have the rights to\n"
-"                                       deleting another user."
+msgid "You don't have the rights to deleting another user."
 msgstr "У вас нет прав для удаления другого пользователя."
 
 #: task_manager/users/views.py:82
-msgid ""
-"The user cannot be deleted,\n"
-"                                      because it is used"
+#, fuzzy
+#| msgid ""
+#| "The user cannot be deleted,\n"
+#| "                                      because it is used"
+msgid "The user cannot be deleted, because it is used"
 msgstr "Невозможно удалить пользователя, потому что он используется"
-
-#~ msgid "Greetings from Hexlet!"
-#~ msgstr "Привет от Хекслета!"
-
-#~ msgid "Practical programming courses"
-#~ msgstr "Практические курсы по программированию"

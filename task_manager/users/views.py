@@ -56,8 +56,8 @@ class UpdateUser(CustomLoginRequired, UserPassesTestMixin,
         return self.request.user.pk == self.get_object().pk
 
     def handle_no_permission(self):
-        messages.error(self.request, _("""You don't have the rights to
-                                       other user's changes"""))
+        messages.error(self.request, _("You don't have the rights to"
+                                       " other user's changes"))
         return redirect(reverse_lazy('users_list'))
 
 
@@ -73,13 +73,13 @@ class RemoverUser(CustomLoginRequired, UserPassesTestMixin,
         return self.request.user.pk == self.get_object().pk
 
     def handle_no_permission(self):
-        messages.error(self.request, _("""You don't have the rights to
-                                       deleting another user."""))
+        messages.error(self.request, _("You don't have the rights to"
+                                       " deleting another user."))
         return redirect(reverse_lazy('users_list'))
 
     def post(self, request, *args, **kwargs):
         if self.get_object().author.first() or self.get_object().tasks.first():
-            messages.error(request, _("""The user cannot be deleted,
-                                      because it is used"""))
+            messages.error(request, _("The user cannot be deleted,"
+                                      " because it is used"))
             return redirect(reverse_lazy('users_list'))
         return super().post(request, *args, **kwargs)

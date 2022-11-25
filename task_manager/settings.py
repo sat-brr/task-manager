@@ -15,12 +15,18 @@ import dotenv
 import os
 import dj_database_url
 import rollbar
+import json
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 FIXTURES_PATH = os.path.abspath('task_manager/fixtures')
 TEST_DATA_PATH = os.path.join(FIXTURES_PATH, 'test_data.json')
+
+
+def load_test_data():
+    with open(TEST_DATA_PATH, 'r') as file:
+        return json.loads(file.read())
 
 
 # Quick-start development settings - unsuitable for production

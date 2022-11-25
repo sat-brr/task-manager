@@ -19,6 +19,13 @@
             "status": 1,
             "executor":1,
             "labels": 1
+        },
+        "bad_user": {
+            "username": "BadUser",
+            "first_name": "",
+            "last_name": "",
+            "password1": "Qazrfv4545",
+            "password2": "Qazrfv4545"
         }
     },
     "exist_records": {
