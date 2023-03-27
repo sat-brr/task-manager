@@ -39,7 +39,8 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG") == 'True'
 
-ALLOWED_HOSTS = ['webserver', 'localhost', 'https://task-manager-y4e9.onrender.com',
+ALLOWED_HOSTS = ['webserver', 'localhost',
+                 'task-manager-y4e9.onrender.com',
                  '127.0.0.1']
 
 CSRF_TRUSTED_ORIGINS = ['https://*.railway.app']
