@@ -43,7 +43,7 @@ ALLOWED_HOSTS = ['webserver', 'localhost',
                  'task-manager-y4e9.onrender.com',
                  '127.0.0.1']
 
-CSRF_TRUSTED_ORIGINS = ['https://*.railway.app']
+CSRF_TRUSTED_ORIGINS = ['https://*.onrender.com']
 
 
 # Application definition
