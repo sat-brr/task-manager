@@ -1,7 +1,7 @@
 install:
 	poetry install
 run:
-	python3 manage.py runserver 127.0.0.1:8000
+	gunicorn -w 4 -b 0.0.0.0:8000 task_manager.wsgi:application
 test:
 	python3 manage.py test
 lint:

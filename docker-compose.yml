@@ -13,7 +13,8 @@ services:
   gunicorn:
     image: task-manager_migrate
     container_name: 'gunicorn'
-    command: python3 manage.py runserver 0.0.0.0:8000
+    command: gunicorn -w 4 -b 0.0.0.0:8000 task_manager.wsgi:application
+    restart: always
     env_file:
       - .env
     volumes:
