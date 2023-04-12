@@ -1,5 +1,6 @@
-[![pylint](https://github.com/sat-brr/python-project-52/actions/workflows/pylint.yml/badge.svg)](https://github.com/sat-brr/python-project-52/actions/workflows/pylint.yml)
+[![flake8](https://github.com/sat-brr/python-project-52/actions/workflows/flake8.yml/badge.svg)](https://github.com/sat-brr/python-project-52/actions/workflows/flake8.yml)
 [![Maintainability](https://api.codeclimate.com/v1/badges/965e3cf390a26562b40b/maintainability)](https://codeclimate.com/github/sat-brr/python-project-52/maintainability)
+[![tests](https://github.com/sat-brr/task-manager/actions/workflows/tests.yml/badge.svg)](https://github.com/sat-brr/task-manager/actions/workflows/tests.yml)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/965e3cf390a26562b40b/test_coverage)](https://codeclimate.com/github/sat-brr/python-project-52/test_coverage)
 
 # Task Manager
