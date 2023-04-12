@@ -6,11 +6,8 @@
 
 # Task Manager
 
-## Project on railway.app:
-https://task-manager-sat.up.railway.app/
-
 ## Description:
-This is a web application that allows you to track scheduled tasks, as well as assign them statuses and labels for the convenience of staying.
+This is a web application that allows you to track scheduled tasks, as well as assign them statuses and labels for easy tracking.
 
 ### Implemented:
 - User registration and authorization

@@ -1,0 +1,24 @@
+version: '3.7'
+
+services:
+  migrate:
+    build: .
+    container_name: 'migrate'
+    command: bash -c "python3 manage.py makemigrations && python3 manage.py migrate"
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+  
+  gunicorn:
+    image: task-manager_migrate
+    container_name: 'gunicorn'
+    command: python3 manage.py runserver 0.0.0.0:8000
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    ports:
+      - 8000:8000
+    depends_on:
+      - migrate

@@ -1,4 +1,4 @@
-name: pylint
+name: flake8
 
 on: [push]
 
