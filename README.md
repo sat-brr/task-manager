@@ -1,3 +1,4 @@
+### Project tests and linter status:
 [![flake8](https://github.com/sat-brr/task-manager/actions/workflows/flake8.yml/badge.svg)](https://github.com/sat-brr/task-manager/actions/workflows/flake8.yml)
 [![Maintainability](https://api.codeclimate.com/v1/badges/965e3cf390a26562b40b/maintainability)](https://codeclimate.com/github/sat-brr/python-project-52/maintainability)
 [![tests](https://github.com/sat-brr/task-manager/actions/workflows/tests.yml/badge.svg)](https://github.com/sat-brr/task-manager/actions/workflows/tests.yml)
