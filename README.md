@@ -64,12 +64,12 @@ cd task-manager/
 touch .env
 ```
 Specify variables:
-- DEBUG = True/False starting in debug mode or not
-- SECRET_KEY = Your django secret key
-- ROLLBAR_TOKEN = Your rollbar token
-- POSTGRES_DB=test
-- POSTGRES_USER=test123
-- POSTGRES_PASSWORD=test321
+- DEBUG=True/False starting in debug mode or not
+- SECRET_KEY=Your django secret key
+- ROLLBAR_TOKEN=Your rollbar token
+- POSTGRES_DB=Your db name
+- POSTGRES_USER=Your db user
+- POSTGRES_PASSWORD=Your db user password
 
 #### Select a language:
 Open the file task_manager/settings.py and change the value of the LANGUAGE_CODE variable to 'ru' for Russian localization or 'en' for English.
