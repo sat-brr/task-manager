@@ -1,25 +1,40 @@
 version: '3.7'
 
 services:
-  migrate:
-    build: .
-    container_name: 'migrate'
-    command: bash -c "python3 manage.py makemigrations && python3 manage.py migrate"
-    env_file:
-      - .env
-    volumes:
-      - .:/app
-  
-  gunicorn:
-    image: task-manager_migrate
-    container_name: 'gunicorn'
-    command: gunicorn -w 4 -b 0.0.0.0:8000 task_manager.wsgi:application
+  db_task_manager:
+    container_name: db_task_manager
+    image: postgres:14.1-alpine
     restart: always
+    ports:
+      - 5432:5432
     env_file:
       - .env
     volumes:
-      - .:/app
+      - db-data:/var/lib/postgresql/data:rw
+    networks:
+      - custom
+
+  task_manager:
+    container_name: task_manager
+    image: task_manager
+    depends_on:
+      - db_task_manager
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db_task_manager:5432/${POSTGRES_DB}
     ports:
       - 8000:8000
-    depends_on:
-      - migrate
+    networks:
+      - custom
+    command: bash -c "python3 manage.py makemigrations && python3 manage.py migrate && gunicorn -w 4 -b 0.0.0.0:8000 task_manager.wsgi:application"
+
+volumes:
+  db-data:
+networks:
+  custom:
+    driver: bridge
